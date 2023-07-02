@@ -7,7 +7,6 @@ interface Props {
   type: "text" | "password";
   loading?: boolean;
   register: any;
-  validation: any;
   error?: string;
 }
 
@@ -17,13 +16,12 @@ const LoginInput: FC<Props> = ({
   type,
   loading,
   register,
-  validation,
   error,
 }) => {
   return (
     <div className={"form-control w-full"}>
       <input
-        {...register(name, validation)}
+        {...register(name)}
         placeholder={placeholder}
         className={cn(
           error ? "input-error" : "",

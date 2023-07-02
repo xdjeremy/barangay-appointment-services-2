@@ -3,13 +3,10 @@
 import React, { FC, useState } from "react";
 import LoginInput from "@/app/(auth)/login/components/login-input";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginValidation } from "@/lib/validations/login-validation";
 import { pocketbase } from "@/lib/utils/pocketbase";
-
-interface Inputs {
-  username: string;
-  password: string;
-}
+import { z } from "zod";
+import { LoginSchema } from "@/app/(auth)/login/components/login-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const LoginForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,9 +16,14 @@ const LoginForm: FC = () => {
     formState: { errors },
     handleSubmit,
     setError,
-  } = useForm<Inputs>();
+  } = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+  });
 
-  const onSubmit: SubmitHandler<Inputs> = async ({ username, password }) => {
+  const onSubmit: SubmitHandler<z.infer<typeof LoginSchema>> = async ({
+    username,
+    password,
+  }) => {
     try {
       setIsLoading(true);
 
@@ -59,7 +61,6 @@ const LoginForm: FC = () => {
           placeholder={"Username or Email Address"}
           type={"text"}
           register={register}
-          validation={LoginValidation.username}
           error={errors.username?.message}
         />
         <LoginInput
@@ -67,7 +68,6 @@ const LoginForm: FC = () => {
           placeholder={"Password"}
           type={"password"}
           register={register}
-          validation={LoginValidation.password}
           error={errors.password?.message}
         />
         <button
