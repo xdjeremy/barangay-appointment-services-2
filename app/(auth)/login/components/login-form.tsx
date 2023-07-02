@@ -3,7 +3,6 @@
 import React, { FC, useState } from "react";
 import LoginInput from "@/app/(auth)/login/components/login-input";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginValidation } from "@/lib/validations/login-validation";
 import { pocketbase } from "@/lib/utils/pocketbase";
 import { z } from "zod";
 import { LoginSchema } from "@/app/(auth)/login/components/login-schema";
@@ -62,7 +61,6 @@ const LoginForm: FC = () => {
           placeholder={"Username or Email Address"}
           type={"text"}
           register={register}
-          validation={LoginValidation.username}
           error={errors.username?.message}
         />
         <LoginInput
@@ -70,7 +68,6 @@ const LoginForm: FC = () => {
           placeholder={"Password"}
           type={"password"}
           register={register}
-          validation={LoginValidation.password}
           error={errors.password?.message}
         />
         <button
