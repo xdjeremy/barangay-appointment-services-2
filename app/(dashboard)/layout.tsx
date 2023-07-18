@@ -1,14 +1,17 @@
-import React, { FC, ReactNode } from "react";
+import React, {FC, ReactNode} from "react";
 import Navbar from "@/app/(dashboard)/components/navbar";
 
 interface Props {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 const DashboardLayout: FC<Props> = ({children}) => {
     return (
-        <div className={'bg-base-300'}>
+        <div className={'bg-base-300 h-screen'}>
             <Navbar/>
+            <div className={'px-20'}>
+                {children}
+            </div>
         </div>
     );
 };
