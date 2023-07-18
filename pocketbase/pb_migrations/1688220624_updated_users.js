@@ -4,14 +4,14 @@ migrate(
     const collection = dao.findCollectionByNameOrId("_pb_users_auth_");
 
     collection.listRule =
-      "id = @request.auth.id || @request.auth.role = 'admin'";
+      "[id] = @request.auth.[id] || @request.auth.role = 'admin'";
     collection.viewRule =
-      "id = @request.auth.id || @request.auth.role = 'admin'";
+      "[id] = @request.auth.[id] || @request.auth.role = 'admin'";
     collection.createRule = "@request.data.role = 'user'";
     collection.updateRule =
-      "id = @request.auth.id || @request.auth.role = 'admin'";
+      "[id] = @request.auth.[id] || @request.auth.role = 'admin'";
     collection.deleteRule =
-      "id = @request.auth.id || @request.auth.role = 'admin'";
+      "[id] = @request.auth.[id] || @request.auth.role = 'admin'";
     collection.options = {
       allowEmailAuth: true,
       allowOAuth2Auth: false,
