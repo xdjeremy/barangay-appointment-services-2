@@ -7,7 +7,7 @@ interface Props {
 
 const DashboardLayout: FC<Props> = ({children}) => {
     return (
-        <div className={'bg-base-300 h-screen'}>
+        <div className={'bg-base-300 min-h-screen'}>
             <Navbar/>
             <div className={'px-20'}>
                 {children}
