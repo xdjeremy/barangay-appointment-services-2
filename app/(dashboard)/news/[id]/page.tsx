@@ -14,25 +14,29 @@ const getNews = async (id: string) => {
 const NewsId = async ({params: {id}}: {
     params: { id: string }
 }) => {
-    const news = await getNews(id)
-    console.log(news);
+    const news: NewsResponse = await getNews(id)
+
+    let imageUrl;
+    if (news.image) {
+        imageUrl = pocketbase.files.getUrl(news, news.image);
+    }
     return (
-        <div className={'w-full max-w-4xl mx-auto'}>
-            <NewsIdHeader/>
-            <div className={'w-full h-[420px] mt-3'}>
+        <div className={'w-full max-w-4xl mx-auto pb-20'}>
+            <NewsIdHeader news={news}/>
+            <div className={'w-full h-[420px] mt-3 relative'}>
                 {
-                    news.image ? (
-                        <Image src={news.image} alt={news.image}/>
+                    imageUrl ? (
+                        <Image src={imageUrl} alt={news.image || ''} fill={true}/>
                     ) : (
                         <div className={'bg-white w-full h-full'}></div>
                     )
                 }
             </div>
-            <div className="text-gray-600 text-[10px] font-normal mt-2">Mayor Abby and Vice Mayor Monique Lagdameo at the Lingkod Bayan Caravan in Barangay San Antonio</div>
+            <div className="text-gray-600 text-[10px] font-normal mt-2">{news.image}</div>
             <p className={'text-black text-xl font-normal mt-8'}>
-                Binisita ni Mayora Abby, Vice Mayor Monique Lagdameo, Congressman Luis Campos at Congressman Kid Peña ang #ProudMakatizens ng San Antonio sa ginanap na Lingkod Bayan Caravan. Abangan ang schedule ng caravan sa inyong barangay!
-                Binisita ni Mayora Abby, Vice Mayor Monique Lagdameo, Congressman Luis Campos at Congressman Kid Peña ang #ProudMakatizens ng San Antonio sa ginanap na Lingkod Bayan Caravan. Abangan ang schedule ng caravan sa inyong barangay!
-                Binisita ni Mayora Abby, Vice Mayor Monique Lagdameo, Congressman Luis Campos at Congressman Kid Peña ang #ProudMakatizens ng San Antonio sa ginanap na Lingkod Bayan Caravan. Abangan ang schedule ng caravan sa inyong barangay!
+                {
+                    news.content
+                }
             </p>
         </div>
     );
