@@ -22,7 +22,7 @@ const News = async () => {
 
     return (
         <div>
-            <PageTitle/>
+            <PageTitle title={'News'} subtitle={'Daily News & updates'}/>
             <div className={'flex flex-row items-start justify-between gap-10'}>
 
                 {/* big news */}
