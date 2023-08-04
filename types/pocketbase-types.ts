@@ -50,24 +50,33 @@ export type AppointmentsRecord = {
 }
 
 export enum DocumentRequestsDocumentTypeOptions {
-	"barangay_clearance" = "barangay_clearance",
-	"police_clearance" = "police_clearance",
-	"barangay_id" = "barangay_id",
-	"potsal_id" = "potsal_id",
+  "postal_id" = "postal_id",
+  "barangay_id" = "barangay_id",
+  "birth_certificate" = "birth_certificate",
+  "voters_id" = "voters_id",
+  "barangay_clearance" = "barangay_clearance",
+  "business_clearance" = "business_clearance",
 }
 export type DocumentRequestsRecord = {
-	document_type: DocumentRequestsDocumentTypeOptions
-	user: RecordIdString
-	email: string
-	active?: boolean
-}
+  document_type: DocumentRequestsDocumentTypeOptions;
+  user: RecordIdString;
+  email: string;
+  active?: boolean;
+  last_name: string;
+  first_name: string;
+  middle_name: string;
+  address: string;
+  birth_date?: IsoDateString;
+  contact_number: number;
+  purpose: string;
+};
 
 export type NewsRecord = {
-	title?: string
-	content?: string
-	author?: RecordIdString
-	image?: string
-}
+  title?: string;
+  content?: string;
+  author?: RecordIdString;
+  image?: string;
+};
 
 export enum TicketRepliesRoleOptions {
 	"user" = "user",
@@ -80,41 +89,46 @@ export type TicketRepliesRecord = {
 }
 
 export type TicketsRecord = {
-	user: RecordIdString
-	email: string
-	subject: string
-	body: string
-	active?: boolean
-}
+  user: RecordIdString;
+  email: string;
+  subject: string;
+  body: string;
+  active?: boolean;
+};
 
 export type UsersRecord = {
-	name: string
-}
+  name: string;
+};
 
 // Response types include system fields and match responses from the PocketBase API
-export type AppointmentsResponse<Texpand = unknown> = AppointmentsRecord & BaseSystemFields<Texpand>
-export type DocumentRequestsResponse<Texpand = unknown> = DocumentRequestsRecord & BaseSystemFields<Texpand>
-export type NewsResponse<Texpand = unknown> = NewsRecord & BaseSystemFields<Texpand>
-export type TicketRepliesResponse<Texpand = unknown> = TicketRepliesRecord & BaseSystemFields<Texpand>
-export type TicketsResponse<Texpand = unknown> = TicketsRecord & BaseSystemFields<Texpand>
-export type UsersResponse = UsersRecord & AuthSystemFields
+export type AppointmentsResponse<Texpand = unknown> =
+  Required<AppointmentsRecord> & BaseSystemFields<Texpand>;
+export type DocumentRequestsResponse<Texpand = unknown> =
+  Required<DocumentRequestsRecord> & BaseSystemFields<Texpand>;
+export type NewsResponse<Texpand = unknown> = Required<NewsRecord> &
+  BaseSystemFields<Texpand>;
+export type TicketRepliesResponse<Texpand = unknown> =
+  Required<TicketRepliesRecord> & BaseSystemFields<Texpand>;
+export type TicketsResponse<Texpand = unknown> = Required<TicketsRecord> &
+  BaseSystemFields<Texpand>;
+export type UsersResponse = Required<UsersRecord> & AuthSystemFields;
 
 // Types containing all Records and Responses, useful for creating typing helper functions
 
 export type CollectionRecords = {
-	appointments: AppointmentsRecord
-	document_requests: DocumentRequestsRecord
-	news: NewsRecord
-	ticket_replies: TicketRepliesRecord
-	tickets: TicketsRecord
-	users: UsersRecord
-}
+  appointments: AppointmentsRecord;
+  document_requests: DocumentRequestsRecord;
+  news: NewsRecord;
+  ticket_replies: TicketRepliesRecord;
+  tickets: TicketsRecord;
+  users: UsersRecord;
+};
 
 export type CollectionResponses = {
-	appointments: AppointmentsResponse
-	document_requests: DocumentRequestsResponse
-	news: NewsResponse
-	ticket_replies: TicketRepliesResponse
-	tickets: TicketsResponse
-	users: UsersResponse
-}
+  appointments: AppointmentsResponse;
+  document_requests: DocumentRequestsResponse;
+  news: NewsResponse;
+  ticket_replies: TicketRepliesResponse;
+  tickets: TicketsResponse;
+  users: UsersResponse;
+};
