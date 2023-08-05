@@ -1,6 +1,11 @@
 import React, { FC } from "react";
+import { UsersResponse } from "@/types/pocketbase-types";
 
-const ContactInformation: FC = () => {
+interface Props {
+  userData: UsersResponse | undefined;
+}
+
+const ContactInformation: FC<Props> = ({ userData }) => {
   return (
     <div className={"w-full rounded-lg bg-zinc-100 px-10 py-6"}>
       <h3 className="text-xl font-bold text-gray-800">Contact Information</h3>
@@ -9,19 +14,19 @@ const ContactInformation: FC = () => {
           <tr>
             <td className="text-base font-semibold text-gray-800">Phone:</td>
             <td className="text-base font-extralight text-black">
-              +63 123 456 7890
+              {userData?.phone}
             </td>
           </tr>
           <tr>
             <td className="text-base font-semibold text-gray-800">Email:</td>
             <td className="text-base font-extralight text-black">
-              johndoe@example.com
+              {userData?.email}
             </td>
           </tr>
           <tr>
             <td className="text-base font-semibold text-gray-800">Username:</td>
             <td className="text-base font-extralight text-black">
-              @john_doe12345
+              {userData?.username}
             </td>
           </tr>
         </tbody>
@@ -33,19 +38,21 @@ const ContactInformation: FC = () => {
           <tr>
             <td className="text-base font-semibold text-gray-800">Street:</td>
             <td className="text-base font-extralight text-black">
-              538 san fernando st. binondo, Manila
+              {userData?.street}
             </td>
           </tr>
           <tr>
             <td className="text-base font-semibold text-gray-800">City:</td>
-            <td className="text-base font-extralight text-black">Manila</td>
+            <td className="text-base font-extralight text-black">
+              {userData?.city}
+            </td>
           </tr>
           <tr>
             <td className="text-base font-semibold text-gray-800">
               State/Province/Area:
             </td>
             <td className="text-base font-extralight text-black">
-              Metro Manila
+              {userData?.province}
             </td>
           </tr>
         </tbody>

@@ -6,8 +6,18 @@ import WorkInformation from "@/app/(dashboard)/profile/components/work-informati
 import ContactInformation from "@/app/(dashboard)/profile/components/contact-information";
 import { Pen } from "lucide-react";
 import EditProfile from "@/app/(dashboard)/profile/components/edit-profile";
+import useSWR from "swr";
+import { pocketbase } from "@/lib/utils/pocketbase";
+import { UsersResponse } from "@/types/pocketbase-types";
 
+const fetcher = async (): Promise<UsersResponse> => {
+  const user = pocketbase.authStore.model?.id;
+  if (!user) throw new Error("User not found");
+  return await pocketbase.collection("users").getOne(user);
+};
 const Profile = () => {
+  const { data, error } = useSWR<UsersResponse>("/api/user", fetcher);
+
   return (
     <div>
       <ProfileHeader />
@@ -23,10 +33,10 @@ const Profile = () => {
       </div>
       <div className={"mt-14 flex flex-row gap-5"}>
         <div className={"flex flex-col gap-6"}>
-          <BasicInformation />
-          <WorkInformation />
+          <BasicInformation userData={data} />
+          <WorkInformation userData={data} />
         </div>
-        <ContactInformation />
+        <ContactInformation userData={data} />
       </div>
       <EditProfile />
     </div>
