@@ -73,7 +73,7 @@ const DocumentPickerCard: FC = () => {
               htmlFor={"voters_id"}
               className={"btn-neutral btn-block btn peer-checked:btn-outline"}
             >
-              Voter's ID
+              Voter`&apos;s ID
             </label>
           </div>
         </div>

@@ -1,35 +1,43 @@
 "use client";
 import React, { FC, useEffect } from "react";
-import { DocumentRequestsRecord } from "@/types/pocketbase-types";
 import useSWR from "swr";
-import { pocketbase } from "@/lib/utils/pocketbase";
 import { useRouter } from "next/navigation";
+import { pocketbase } from "@/lib/utils/pocketbase";
 import { Admin } from "pocketbase";
+import { TicketsResponse, UsersResponse } from "@/types/pocketbase-types";
+import { format } from "date-fns";
+
+type TExpand = {
+  user: UsersResponse;
+};
 
 interface TableRowProps {
-  data: DocumentRequestsRecord;
+  data: TicketsResponse<TExpand>;
 }
 
 const TableRow: FC<TableRowProps> = ({ data }) => {
   return (
     <tr className="border-b bg-white  hover:bg-gray-50 ">
+      <td className="px-6 py-4">{data.purpose}</td>
+      <td className="px-6 py-4">{data.expand?.user.name}</td>
       <td className="px-6 py-4">
-        {data.first_name} {data.last_name}
+        {format(new Date(data.created), "MMMM dd yyyy")}
       </td>
-      <td className="px-6 py-4">{data.document_type}</td>
-      <td className="px-6 py-4">{data.email}</td>
     </tr>
   );
 };
 
-const fetcher = async (): Promise<DocumentRequestsRecord[]> => {
+const fetcher = async (): Promise<TicketsResponse<TExpand>[]> => {
   return pocketbase
-    .collection("document_requests")
-    .getFullList<DocumentRequestsRecord>();
+    .collection("tickets")
+    .getFullList<TicketsResponse<TExpand>>({
+      expand: "user",
+    });
 };
-const AdminArchive = () => {
+const AdminTickets = () => {
   const { data } = useSWR("/api/document-requests", fetcher);
 
+  console.log(data);
   const router = useRouter();
 
   useEffect(() => {
@@ -39,20 +47,20 @@ const AdminArchive = () => {
   }, []);
   return (
     <div>
-      <div className="text-[64px] font-black text-gray-800">Archives</div>
+      <div className="text-[64px] font-black text-gray-800">Concerns</div>
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative mt-8 overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-left text-sm text-gray-500 ">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Name
+                Feedback
               </th>
               <th scope="col" className="px-6 py-3">
-                Requested Document
+                Citizen Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Email
+                Date
               </th>
             </tr>
           </thead>
@@ -67,4 +75,4 @@ const AdminArchive = () => {
   );
 };
 
-export default AdminArchive;
+export default AdminTickets;

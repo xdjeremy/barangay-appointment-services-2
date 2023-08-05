@@ -109,11 +109,9 @@ const fetcher = async (date: string): Promise<AppointmentsRecord[]> => {
     });
 };
 const Schedule: FC<Props> = ({ date }) => {
-  if (!date) {
-    toast.error("Please select a date");
-    return;
-  }
-  const formatDate = new Date(date.toString()).toDateString();
+  const formatDate = date
+    ? new Date(date.toString()).toDateString()
+    : new Date().toDateString();
   const { data } = useSWR<AppointmentsRecord[]>([formatDate], fetcher);
 
   return (
