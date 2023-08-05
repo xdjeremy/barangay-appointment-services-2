@@ -79,8 +79,8 @@ export type NewsRecord = {
 };
 
 export enum TicketRepliesRoleOptions {
-	"user" = "user",
-	"admin" = "admin",
+  "user" = "user",
+  "admin" = "admin",
 }
 export type TicketRepliesRecord = {
 	ticket: RecordIdString
@@ -88,12 +88,21 @@ export type TicketRepliesRecord = {
 	role: TicketRepliesRoleOptions
 }
 
+export enum TicketsPurposeOptions {
+  "general_question" = "general_question",
+  "feature_request" = "feature_request",
+  "bug_report" = "bug_report",
+  "my_account" = "my_account",
+  "other" = "other",
+}
 export type TicketsRecord = {
   user: RecordIdString;
   email: string;
-  subject: string;
+  firstName: string;
+  lastName?: string;
   body: string;
   active?: boolean;
+  purpose?: TicketsPurposeOptions;
 };
 
 export type UsersRecord = {
