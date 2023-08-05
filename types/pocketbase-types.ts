@@ -35,19 +35,20 @@ export type AuthSystemFields<T = never> = {
 
 // Record types for each collection
 
-export enum AppointmentsAppointTypeOptions {
-	"barangay_captain" = "barangay_captain",
-	"barangay_secretatary" = "barangay_secretatary",
-	"barangay_treasurer" = "barangay_treasurer",
-	"barangay_councilor" = "barangay_councilor",
-	"sk_chairman" = "sk_chairman",
+export enum AppointmentsAppointmentTimeOptions {
+  "TEN_AM" = "TEN_AM",
+  "ONE_PM" = "ONE_PM",
+  "TWO_PM" = "TWO_PM",
+  "THREE_PM" = "THREE_PM",
+  "FOUR_PM" = "FOUR_PM",
 }
 export type AppointmentsRecord = {
-	user: RecordIdString
-	appoint_type?: AppointmentsAppointTypeOptions
-	appointment_date?: IsoDateString
-	active?: boolean
-}
+  user: RecordIdString;
+  active?: boolean;
+  appointment_time?: AppointmentsAppointmentTimeOptions;
+  barangay_official?: string;
+  appointment_date?: string;
+};
 
 export enum DocumentRequestsDocumentTypeOptions {
   "postal_id" = "postal_id",

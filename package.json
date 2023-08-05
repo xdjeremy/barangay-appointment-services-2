@@ -24,6 +24,7 @@
     "pocketbase": "^0.15.2",
     "postcss": "8.4.24",
     "react": "18.2.0",
+    "react-calendar": "^4.6.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
     "react-hot-toast": "^2.4.1",
