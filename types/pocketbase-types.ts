@@ -83,10 +83,10 @@ export enum TicketRepliesRoleOptions {
   "admin" = "admin",
 }
 export type TicketRepliesRecord = {
-	ticket: RecordIdString
-	message?: string
-	role: TicketRepliesRoleOptions
-}
+  ticket: RecordIdString;
+  message?: string;
+  role: TicketRepliesRoleOptions;
+};
 
 export enum TicketsPurposeOptions {
   "general_question" = "general_question",
@@ -105,8 +105,21 @@ export type TicketsRecord = {
   purpose?: TicketsPurposeOptions;
 };
 
+export enum UsersGenderOptions {
+  "male" = "male",
+  "female" = "female",
+  "other" = "other",
+}
 export type UsersRecord = {
   name: string;
+  birth_date?: IsoDateString;
+  gender?: UsersGenderOptions;
+  phone?: number;
+  street?: string;
+  city?: string;
+  province?: string;
+  work?: string;
+  work_phone?: string;
 };
 
 // Response types include system fields and match responses from the PocketBase API
