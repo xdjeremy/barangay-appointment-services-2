@@ -1,41 +1,33 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import Image from "next/image";
 import Icon from "../../../assets/images/bas-icon.png";
 import Link from "next/link";
-import {Grip, User2} from "lucide-react";
+import { Grip, User2 } from "lucide-react";
 
 const navLinks: {
-    title: string;
-    path: string;
+  title: string;
+  path: string;
 }[] = [
-    {
-        title: "News",
-        path: "/news",
-    },
-    {
-        title: "Profile",
-        path: "/profile",
-    },
-    {
-        title: "Directory",
-        path: "/directory",
-    },
-    {
-        title: "Archive",
-        path: "/archive",
-    },
-    {
-        title: "Calendar",
-        path: "/calendar",
-    },
-    {
-        title: "Appointments",
-        path: "/appointments",
-    },
-    {
-        title: "Submit a Ticket",
-        path: "/submit-a-ticket",
-    },
+  {
+    title: "News",
+    path: "/news",
+  },
+  {
+    title: "Profile",
+    path: "/profile",
+  },
+  {
+    title: "Archive",
+    path: "/archive",
+  },
+  {
+    title: "Appointments",
+    path: "/appointments",
+  },
+  {
+    title: "Submit a Ticket",
+    path: "/ticket",
+  },
 ];
 const Navbar: FC = () => {
     return (
