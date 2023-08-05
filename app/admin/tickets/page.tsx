@@ -19,7 +19,7 @@ const TableRow: FC<TableRowProps> = ({ data }) => {
   return (
     <tr className="border-b bg-white  hover:bg-gray-50 ">
       <td className="px-6 py-4">{data.purpose}</td>
-      <td className="px-6 py-4">{data.expand?.user.name}</td>
+      <td className="px-6 py-4">{data.expand?.user?.name || ""}</td>
       <td className="px-6 py-4">
         {format(new Date(data.created), "MMMM dd yyyy")}
       </td>
