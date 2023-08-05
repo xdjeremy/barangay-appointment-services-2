@@ -30,7 +30,15 @@ const LoginForm: FC = () => {
     try {
       setIsLoading(true);
 
-      await pocketbase.collection("users").authWithPassword(username, password);
+      await pocketbase
+        .collection("users")
+        .authWithPassword(username, password)
+        .catch(async () => {
+          await pocketbase.admins.authWithPassword(username, password);
+
+          // Redirect to home page
+          await router.push("/news");
+        });
 
       // Redirect to home page
       await router.push("/news");
