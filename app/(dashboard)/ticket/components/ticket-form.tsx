@@ -9,8 +9,10 @@ import {
 } from "react-hook-form";
 import { TicketSchema } from "@/app/(dashboard)/ticket/components/ticket-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TicketsPurposeOptions } from "@/types/pocketbase-types";
+import { TicketsPurposeOptions, TicketsRecord } from "@/types/pocketbase-types";
 import { cn } from "@/lib/utils/cn";
+import toast from "react-hot-toast";
+import { pocketbase } from "@/lib/utils/pocketbase";
 
 interface InputProps {
   label: string;
@@ -81,7 +83,30 @@ const TicketForm: FC = () => {
   const submitTicket: SubmitHandler<z.infer<typeof TicketSchema>> = async (
     data
   ) => {
-    console.log(data);
+    try {
+      // check if user is logged in
+      if (!pocketbase.authStore.model || !pocketbase.authStore.isValid) {
+        return toast.error("You must be logged in to submit a ticket.");
+      }
+
+      const body: TicketsRecord = {
+        user: pocketbase.authStore.model?.id,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        body: data.body,
+        purpose: data.purpose,
+        active: true,
+      };
+
+      await pocketbase.collection("tickets").create(body);
+
+      toast.success("Ticket submitted successfully!");
+
+      register.reset();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   return (
