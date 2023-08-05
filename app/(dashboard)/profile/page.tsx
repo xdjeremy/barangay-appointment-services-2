@@ -16,11 +16,11 @@ const fetcher = async (): Promise<UsersResponse> => {
   return await pocketbase.collection("users").getOne(user);
 };
 const Profile = () => {
-  const { data, error } = useSWR<UsersResponse>("/api/user", fetcher);
+  const { data } = useSWR<UsersResponse>("/api/user", fetcher);
 
   return (
     <div>
-      <ProfileHeader />
+      <ProfileHeader userData={data} />
       <div className={"mt-8 flex w-full flex-col items-end justify-end"}>
         <button
           className="btn-neutral btn"

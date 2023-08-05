@@ -1,9 +1,17 @@
 import React, { FC } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  FormProvider,
+  SubmitHandler,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import { z } from "zod";
 import { ProfileSchema } from "@/app/(dashboard)/profile/components/profile-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UsersGenderOptions } from "@/types/pocketbase-types";
+import { UsersGenderOptions, UsersRecord } from "@/types/pocketbase-types";
+import toast from "react-hot-toast";
+import { pocketbase } from "@/lib/utils/pocketbase";
+import { cn } from "@/lib/utils/cn";
 
 interface InputProps {
   label: string;
@@ -12,7 +20,10 @@ interface InputProps {
 }
 
 const Input: FC<InputProps> = ({ label, name, type = "text" }) => {
-  const { register } = useFormContext<z.infer<typeof ProfileSchema>>();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<z.infer<typeof ProfileSchema>>();
 
   return (
     <div className="form-control w-full max-w-xs">
@@ -22,8 +33,16 @@ const Input: FC<InputProps> = ({ label, name, type = "text" }) => {
       <input
         {...register(name)}
         type={type}
-        className="input-bordered input w-full max-w-xs"
+        className={cn(
+          errors[name] && "input-error",
+          "input-bordered input w-full max-w-xs"
+        )}
       />
+      {errors[name] && (
+        <label className="label">
+          <span className="label-text-alt">{errors[name]?.message}</span>
+        </label>
+      )}
     </div>
   );
 };
@@ -49,10 +68,38 @@ const EditProfile: FC = () => {
     resolver: zodResolver(ProfileSchema),
   });
 
+  const editProfileHandler: SubmitHandler<
+    z.infer<typeof ProfileSchema>
+  > = async (data) => {
+    try {
+      const body: UsersRecord = {
+        birth_date: new Date(data.birthDate).toISOString(),
+        gender: data.gender,
+        phone: parseInt(data.phone),
+        street: data.street,
+        city: data.city,
+        province: data.province,
+        work: data.work,
+        work_phone: data.workPhone,
+      };
+
+      await pocketbase
+        .collection("users")
+        .update(pocketbase.authStore.model?.id!, body);
+      toast.success("Profile updated successfully");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <FormProvider {...register}>
       <dialog id="my_modal_1" className="modal-scroll modal">
-        <form method="dialog" className="modal-box">
+        <form
+          onSubmit={register.handleSubmit(editProfileHandler)}
+          method="dialog"
+          className="modal-box"
+        >
           <h3 className="text-center text-4xl font-bold text-gray-800">
             Edit Profile
           </h3>
@@ -76,12 +123,10 @@ const EditProfile: FC = () => {
                 Contact Information
               </span>
               <Input label={"Phone"} name={"phone"} />
-              <Input label={"Phone"} name={"phone"} />
-              <Input label={"Phone"} name={"phone"} />
             </div>
           </div>
 
-          <div>
+          <div className={"mt-28"}>
             <h3 className="text-xl font-bold text-gray-800">Address</h3>
             <Input label={"Street"} name={"street"} />
             <Input label={"City"} name={"city"} />
@@ -97,7 +142,14 @@ const EditProfile: FC = () => {
             <button type={"submit"} className={"btn-neutral btn"}>
               Submit
             </button>
-            <button className="btn-neutral btn">Cancel</button>
+            <button
+              // @ts-ignore
+              onClick={() => window.my_modal_1!.close()}
+              type={"button"}
+              className="btn-neutral btn"
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </dialog>

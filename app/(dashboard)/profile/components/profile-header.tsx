@@ -1,7 +1,12 @@
-import React from "react";
+import React, { FC } from "react";
 import Image from "next/image";
+import { UsersResponse } from "@/types/pocketbase-types";
 
-const ProfileHeader = () => {
+interface Props {
+  userData: UsersResponse | undefined;
+}
+
+const ProfileHeader: FC<Props> = ({ userData }) => {
   return (
     <div className={"relative mt-9 h-80 bg-zinc-100"}>
       <div
@@ -16,9 +21,7 @@ const ProfileHeader = () => {
           className="rounded-full"
           src="https://via.placeholder.com/200x200"
         />
-        <div className="h-[73px] w-[300px] text-5xl font-medium text-black">
-          John A. Doe
-        </div>
+        <div className="text-5xl font-medium text-black">{userData?.name}</div>
       </div>
     </div>
   );

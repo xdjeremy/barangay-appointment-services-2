@@ -111,7 +111,7 @@ export enum UsersGenderOptions {
   "other" = "other",
 }
 export type UsersRecord = {
-  name: string;
+  name?: string;
   birth_date?: IsoDateString;
   gender?: UsersGenderOptions;
   phone?: number;
