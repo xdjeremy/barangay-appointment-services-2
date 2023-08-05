@@ -1,29 +1,26 @@
-import React, {FC} from 'react';
+import React, { FC } from "react";
 import Image from "next/image";
+import { NewsResponse } from "@/types/pocketbase-types";
+import Link from "next/link";
 
 interface Props {
-    title?: string;
-    image?: string;
+  news: NewsResponse;
 }
 
-9
-const SmallNewsItem: FC<Props> = ({title, image}) => {
-    return (
-        <div className={'flex flex-col w-full'}>
-            {
-                image ? (
-                    <div className={'w-full'}>
-                        <Image src={image} alt={''} fill={true}/>
-                    </div>
-                ) : (
-                    <div className={'w-full h-[209px] bg-white'}></div>
-                )
-            }
-            <h2 className={'text-black text-xl font-medium'}>
-                {title}
-            </h2>
+9;
+const SmallNewsItem: FC<Props> = ({ news }) => {
+  return (
+    <Link href={`/news/${news.id}`} className={"flex w-full flex-col"}>
+      {news.image ? (
+        <div className={"w-full"}>
+          <Image src={news.image} alt={""} fill={true} />
         </div>
-    );
+      ) : (
+        <div className={"h-[209px] w-full bg-white"}></div>
+      )}
+      <h2 className={"text-xl font-medium text-black"}>{news.title}</h2>
+    </Link>
+  );
 };
 
 export default SmallNewsItem;
