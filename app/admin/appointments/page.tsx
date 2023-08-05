@@ -18,7 +18,7 @@ const TableRow: FC<TableRowProps> = ({ data }) => {
   return (
     <tr className="border-b bg-white  hover:bg-gray-50 ">
       <td className="px-6 py-4">{data.barangay_official}</td>
-      <td className="px-6 py-4">{data.expand?.user.name}</td>
+      <td className="px-6 py-4">{data.expand?.user?.name || ""}</td>
       <td className="px-6 py-4">
         {data.appointment_date} {data.appointment_time}
       </td>
@@ -36,7 +36,6 @@ const fetcher = async (): Promise<AppointmentsResponse<TExpand>[]> => {
 const AdminAppointments = () => {
   const { data } = useSWR("/api/document-requests", fetcher);
 
-  console.log(data);
   const router = useRouter();
 
   useEffect(() => {
