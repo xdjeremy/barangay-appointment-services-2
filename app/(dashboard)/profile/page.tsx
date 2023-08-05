@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileHeader from "@/app/(dashboard)/profile/components/profile-header";
 import BasicInformation from "@/app/(dashboard)/profile/components/basic-information";
 import WorkInformation from "@/app/(dashboard)/profile/components/work-information";
@@ -9,6 +9,7 @@ import EditProfile from "@/app/(dashboard)/profile/components/edit-profile";
 import useSWR from "swr";
 import { pocketbase } from "@/lib/utils/pocketbase";
 import { UsersResponse } from "@/types/pocketbase-types";
+import { useRouter } from "next/navigation";
 
 const fetcher = async (): Promise<UsersResponse> => {
   const user = pocketbase.authStore.model?.id;
@@ -17,6 +18,13 @@ const fetcher = async (): Promise<UsersResponse> => {
 };
 const Profile = () => {
   const { data } = useSWR<UsersResponse>("/api/user", fetcher);
+
+  const router = useRouter();
+  useEffect(() => {
+    if (!pocketbase.authStore.isValid) {
+      router.push("/login");
+    }
+  });
 
   return (
     <div>

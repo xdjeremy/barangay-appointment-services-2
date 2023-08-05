@@ -7,6 +7,7 @@ import { pocketbase } from "@/lib/utils/pocketbase";
 import { z } from "zod";
 import { LoginSchema } from "@/app/(auth)/login/components/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 const LoginForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,8 @@ const LoginForm: FC = () => {
     resolver: zodResolver(LoginSchema),
   });
 
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<z.infer<typeof LoginSchema>> = async ({
     username,
     password,
@@ -28,6 +31,9 @@ const LoginForm: FC = () => {
       setIsLoading(true);
 
       await pocketbase.collection("users").authWithPassword(username, password);
+
+      // Redirect to home page
+      await router.push("/news");
     } catch (err: any) {
       setError("username", {
         type: "manual",

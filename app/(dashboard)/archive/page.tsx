@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import PageTitle from "@/app/(dashboard)/components/page-title";
 import UserDetailsCard from "@/app/(dashboard)/archive/components/user-details-card";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -10,10 +10,19 @@ import DocumentPickerCard from "@/app/(dashboard)/archive/components/document-pi
 import { DocumentRequestsRecord } from "@/types/pocketbase-types";
 import { pocketbase } from "@/lib/utils/pocketbase";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Archive = () => {
   const methods = useForm<z.infer<typeof ArchiveSchema>>({
     resolver: zodResolver(ArchiveSchema),
+  });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!pocketbase.authStore.isValid) {
+      router.push("/login");
+    }
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof ArchiveSchema>> = async (
