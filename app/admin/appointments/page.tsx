@@ -53,7 +53,7 @@ const TableRow: FC<TableRowProps> = ({ data }) => {
             </p>
             <div className={"mt-5 flex w-full flex-col items-end"}>
               <button onClick={handleDelete} className={"btn-error btn"}>
-                Delete Request
+                Delete Appointment
               </button>
             </div>
           </form>
