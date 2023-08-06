@@ -1,10 +1,11 @@
 "use client";
 import React, { FC, useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useRouter } from "next/navigation";
 import { pocketbase } from "@/lib/utils/pocketbase";
 import { Admin } from "pocketbase";
 import { AppointmentsResponse, UsersResponse } from "@/types/pocketbase-types";
+import toast from "react-hot-toast";
 
 type TExpand = {
   user: UsersResponse;
@@ -15,12 +16,51 @@ interface TableRowProps {
 }
 
 const TableRow: FC<TableRowProps> = ({ data }) => {
+  const { mutate } = useSWRConfig();
+  const handleDelete = async () => {
+    try {
+      await pocketbase.collection("appointments").delete(data.id);
+
+      toast.success("Appointment Deleted");
+
+      await mutate("/api/document-requests");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
   return (
     <tr className="border-b bg-white  hover:bg-gray-50 ">
       <td className="px-6 py-4">{data.barangay_official}</td>
       <td className="px-6 py-4">{data.expand?.user?.name || ""}</td>
       <td className="px-6 py-4">
         {data.appointment_date} {data.appointment_time}
+      </td>
+      <td>
+        <button
+          // @ts-ignore
+          onClick={() => window[data.id].showModal()}
+          className={"btn-neutral btn"}
+        >
+          Manage
+        </button>
+        <dialog id={data.id} className="modal">
+          <form method="dialog" className="modal-box">
+            <h3 className="text-lg font-bold">{data.expand?.user.name}</h3>
+            <p className="py-4">User: {data.expand?.user.username || ""}</p>
+            <p className="">Barangay Official: {data.barangay_official}</p>
+            <p>
+              Date & Time: {data.appointment_date} {data.appointment_time}
+            </p>
+            <div className={"mt-5 flex w-full flex-col items-end"}>
+              <button onClick={handleDelete} className={"btn-error btn"}>
+                Delete Request
+              </button>
+            </div>
+          </form>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
       </td>
     </tr>
   );
@@ -59,6 +99,9 @@ const AdminAppointments = () => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Edit
               </th>
             </tr>
           </thead>
