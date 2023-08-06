@@ -20,19 +20,17 @@ const fetchNews = async (context: any) => {
 const NewsId: NextPage = async (context) => {
   const data: NewsResponse = await fetchNews(context);
 
-  // console.log(data);
-  // const url = pocketbase.files.getUrl(data, data)
+  const imageUrl = pocketbase.files.getUrl(data, data.image);
   return (
     <div>
       <NewsIdHeader data={data} />
-      {data.image ? (
-        <>
-          {/*<Image src={data.image} alt={data.image} width={895} height={425} />*/}
-        </>
-      ) : (
-        <></>
-      )}
-      <Image src={data.image} alt={data.image} width={895} height={425} />
+      <Image
+        className={"mx-auto py-5"}
+        src={imageUrl}
+        alt={data.image}
+        width={895}
+        height={425}
+      />
       <p className={"text-xl text-black"}>{data.content}</p>
     </div>
   );

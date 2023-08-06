@@ -37,7 +37,7 @@ const LoginForm: FC = () => {
           await pocketbase.admins.authWithPassword(username, password);
 
           // Redirect to home page
-          await router.push("/news");
+          await router.push("/admin/archive");
         });
 
       // Redirect to home page
