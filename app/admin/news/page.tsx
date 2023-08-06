@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { NewsSchema } from "@/app/admin/news/components/news-schema";
@@ -22,6 +22,7 @@ const AdminNews = () => {
     resolver: zodResolver(NewsSchema),
   });
 
+  const router = useRouter();
   const publishNews: SubmitHandler<z.infer<typeof NewsSchema>> = async (
     data
   ) => {
@@ -45,12 +46,13 @@ const AdminNews = () => {
     }
   };
 
-  const router = useRouter();
-
   // check if user is admin
-  if (!(pocketbase.authStore.model instanceof Admin)) {
-    router.push("/news");
-  }
+  useEffect(() => {
+    if (!(pocketbase.authStore.model instanceof Admin)) {
+      router.push("/news");
+    }
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(publishNews)}>
       <div className="text-[64px] font-black text-gray-800">Add News</div>
