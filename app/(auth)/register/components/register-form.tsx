@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ClientResponseError } from "pocketbase";
 import toast from "react-hot-toast";
 import { pocketbase } from "@/lib/utils/pocketbase";
+import { useRouter } from "next/navigation";
 
 const RegisterForm: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,8 @@ const RegisterForm: FC = () => {
   } = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
   });
+
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<z.infer<typeof RegisterSchema>> = async ({
     name,
@@ -44,7 +47,9 @@ const RegisterForm: FC = () => {
       // send email
       await pocketbase.collection("users").requestVerification(email);
 
-      toast.success("Please check your email to verify your account");
+      toast.success("Account created successfully!");
+
+      router.push("/login");
     } catch (err: any) {
       if (err instanceof ClientResponseError) {
         const obj = Object.keys(err.data.data);
